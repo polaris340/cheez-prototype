@@ -20,6 +20,7 @@ public class Post {
     public String subtitle;
     public String url;
     public String imageUrl;
+    public boolean liked;
 
     private static Response.Listener listener = new Response.Listener() {
         @Override
@@ -45,6 +46,9 @@ public class Post {
         }
         post.url = jsonObject.getString("url");
         post.imageUrl = jsonObject.getString("image_url");
+
+
+        post.liked = jsonObject.getString("liked").equals("1");
 
         return post;
     }
@@ -77,6 +81,9 @@ public class Post {
     }
 
     public void like(final boolean isLike) {
+        if (isLike) {
+            this.liked = !this.liked;
+        }
         Request request = new StringRequest(
                 Request.Method.POST,
                 App.BASE_URL + "/like",

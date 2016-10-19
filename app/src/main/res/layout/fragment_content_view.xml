@@ -84,6 +84,7 @@
             android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal">
             <co.cheez.cheez.IconButton
+                android:visibility="gone"
                 android:id="@+id/btn_hate"
                 android:text="{fa-times-circle}"
                 style="?android:borderlessButtonStyle"

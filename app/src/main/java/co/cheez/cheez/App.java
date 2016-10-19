@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.kakao.KakaoLink;
 import com.kakao.KakaoParameterException;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -36,6 +38,14 @@ public class App extends Application {
     private static final int DISK_CACHE_FILE_COUNT = 100;
 
     public static final String BASE_URL = "http://cheez.co";
+
+    public enum TrackerName {
+        APP_TRACKER, // Tracker used only in this app.
+        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
+        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
+    }
+
+    Tracker mTracker;
 
     @Override
     public void onCreate() {
@@ -109,6 +119,14 @@ public class App extends Application {
 
     public static class DataUpdateEvent {
 
+    }
+
+    public synchronized Tracker getTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.app_tracker);
+        }
+        return mTracker;
     }
 
 }

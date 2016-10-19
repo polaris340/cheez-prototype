@@ -10,8 +10,8 @@ android {
         applicationId "co.cheez.cheez"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.5"
     }
     buildTypes {
         release {
@@ -37,6 +37,7 @@ dependencies {
     compile 'com.felipecsl:gifimageview:1.1.0'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.google.android.gms:play-services:7.0.0'
     compile group: project.KAKAO_SDK_GROUP, name: 'kakaolink', version: project.KAKAO_SDK_VERSION
 
 }

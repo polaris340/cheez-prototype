@@ -23,6 +23,8 @@ import android.widget.VideoView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.kakao.KakaoLink;
 import com.kakao.KakaoParameterException;
 import com.kakao.KakaoTalkLinkMessageBuilder;
@@ -55,6 +57,8 @@ public class ContentViewFragment extends Fragment implements View.OnClickListene
     private Dialog mLikeDialog;
     private float mWindowWidth;
     private float mWindowHeight;
+
+    private Button likeButton;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -119,12 +123,26 @@ public class ContentViewFragment extends Fragment implements View.OnClickListene
 
 
         mPost.pass();
+        // Get tracker.
+        Tracker t = ((App) getActivity().getApplication()).getTracker();
+
+        // Set screen name.
+        t.setScreenName("ContentView " + mPost.id);
+
+        // Send a screen view.
+        t.send(new HitBuilders.ScreenViewBuilder().build());
 
         TextView title = (TextView) rootView.findViewById(R.id.title);
         TextView subtitle = (TextView) rootView.findViewById(R.id.subtitle);
         Button linkButton = (Button) rootView.findViewById(R.id.btn_link);
-        Button likeButton = (Button) rootView.findViewById(R.id.btn_like);
+        likeButton = (Button) rootView.findViewById(R.id.btn_like);
         Button hateButton = (Button) rootView.findViewById(R.id.btn_hate);
+
+        if (mPost.liked) {
+            likeButton.setTextColor(getResources().getColor(R.color.yelllow));
+        } else {
+            likeButton.setTextColor(getResources().getColor(android.R.color.white));
+        }
 
 
         ImageView imageView = (ImageView) rootView.findViewById(R.id.iv_main);
@@ -190,7 +208,7 @@ public class ContentViewFragment extends Fragment implements View.OnClickListene
 
         if (mLinkClicked) {
             if (mLikeDialog == null || !mLikeDialog.isShowing()) {
-                showLikeDialog();
+                //showLikeDialog();
             }
         }
     }
@@ -230,8 +248,15 @@ public class ContentViewFragment extends Fragment implements View.OnClickListene
                 mPost.linkClick();
                 break;
             case R.id.btn_like:
-                Toast.makeText(getActivity(), "좋아요 :)", Toast.LENGTH_SHORT).show();
+                if (!mPost.liked)
+                    Toast.makeText(getActivity(), "좋아요 :)", Toast.LENGTH_SHORT).show();
                 mPost.like(true);
+                if (mPost.liked) {
+                    likeButton.setTextColor(getResources().getColor(R.color.yelllow));
+                } else {
+                    likeButton.setTextColor(getResources().getColor(android.R.color.white));
+                }
+
                 break;
             case R.id.btn_hate:
                 Toast.makeText(getActivity(), "싫어요 :(", Toast.LENGTH_SHORT).show();
